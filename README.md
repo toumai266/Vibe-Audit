@@ -19,7 +19,7 @@
 </p>
 
 <p align="center">
-  <img src="./readme.JPG" alt="vibe audit overview screenshot" width="100%" />
+  <img src="./screenshot.JPG" alt="vibe audit overview screenshot" width="100%" />
 </p>
 
 ## 1. Overview

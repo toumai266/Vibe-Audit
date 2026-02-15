@@ -30,10 +30,17 @@
     "node": ">=18"
   },
   "files": [
-    "bin/",
-    "daemon/",
-    "hooks/",
-    "static/"
+    "bin/cli.js",
+    "daemon/main.py",
+    "daemon/requirements.txt",
+    "daemon/.env.example",
+    "daemon/api/**/*.py",
+    "daemon/core/**/*.py",
+    "daemon/db/**/*.py",
+    "daemon/mcp/**/*.py",
+    "daemon/services/**/*.py",
+    "hooks/*.py",
+    "static/**"
   ],
   "type": "commonjs"
 }
