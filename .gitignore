@@ -1,0 +1,78 @@
+# Internal Scripts
+scripts/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage/
+htmlcov/
+dist/
+build/
+.venv/
+venv/
+
+# Database / runtime
+*.db
+*.sqlite3
+daemon/vibe_audit.db
+daemon/*.db-wal
+daemon/*.db-shm
+daemon/*.bak-*
+
+# Secrets
+daemon/settings.json
+.env
+.env.*
+!.env.example
+
+# Node / frontend
+ui/node_modules/
+ui/dist/
+ui/.vite/
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+.npm-cache/
+
+# IDE / local agent configs
+.vscode/
+.idea/
+.claude/
+.gemini/
+.serena/
+.omc/
+.claude/settings.json
+.gemini/settings.json
+.gemini/history/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Hooks debug
+hooks/hook_debug.log
+hooks/claude_hook_debug.log
+hooks/*debug*.log
+
+# Local runtime artifacts
+session-*.json
+*.tgz
+nul
+
+# Temp / Debug
+_debug_*
+_session_*
+_hook_log_*
+_*_snapshots.txt
+debug_*.py
+testbad/
+hooktest/
+hooktest2/
+
+# Internal docs (not for public distribution)
+docs/

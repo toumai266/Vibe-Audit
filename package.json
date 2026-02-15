@@ -1,0 +1,39 @@
+{
+  "name": "vibe-audit",
+  "version": "0.1.0",
+  "description": "Agent session auditor for vibe-coding - verifies intent alignment in real-time",
+  "bin": {
+    "vibe-audit": "bin/cli.js"
+  },
+  "scripts": {
+    "build:ui": "cd ui && npm install && npm run build",
+    "postbuild:ui": "node -e \"const fs=require('fs');const src='ui/dist';const dst='static';if(fs.existsSync(dst))fs.rmSync(dst,{recursive:true});fs.cpSync(src,dst,{recursive:true});console.log('Static files copied to /static')\"",
+    "build": "npm run build:ui && npm run postbuild:ui",
+    "dev": "cd daemon && python main.py",
+    "dev:ui": "npm --prefix ui run dev",
+    "test:backend": "pytest daemon/tests -q",
+    "verify:docs-sync": "python scripts/verify_docs_sync.py",
+    "verify:package-smoke": "python scripts/verify_package_smoke.py",
+    "verify:all": "npm run verify:docs-sync && npm run test:backend && npm --prefix ui run build && npm run postbuild:ui && npm run verify:package-smoke",
+    "verify:golden-scenarios": "python scripts/golden_scenarios.py"
+  },
+  "keywords": [
+    "vibe-coding",
+    "agent",
+    "audit",
+    "intent-drift",
+    "claude-code",
+    "gemini-cli"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "bin/",
+    "daemon/",
+    "hooks/",
+    "static/"
+  ],
+  "type": "commonjs"
+}
