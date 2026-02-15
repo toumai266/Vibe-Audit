@@ -1,21 +1,22 @@
-<div align="center">
-  <h1 style="font-family:'Tenada', sans-serif; font-size:56px; letter-spacing:2px; margin:0; border:0; border-bottom:none; padding:0;">
-    VIBE AUDIT
-  </h1>
-  <p>
-    <strong>Agent Context Audit Console</strong><br />
-    <em>Keep your coding agents on intent.</em>
-  </p>
-  <p>
-    <img alt="status beta" src="https://img.shields.io/badge/Status-Beta-ff8a3d?style=flat-square&labelColor=0f172a" style="vertical-align:middle; margin-left:8px;" />
-  </p>
-  <p style="margin:10px 0 0 0;">
-    <img alt="FastAPI >=0.109" src="https://img.shields.io/badge/FastAPI-%3E%3D0.109-009688?style=flat-square&logo=fastapi&logoColor=white&labelColor=111827" />
-    <img alt="React 19.2" src="https://img.shields.io/badge/React-19.2-61dafb?style=flat-square&logo=react&logoColor=0b1220&labelColor=111827" />
-    <img alt="Python 3.10+" src="https://img.shields.io/badge/Python-3.10%2B-3776ab?style=flat-square&logo=python&logoColor=white&labelColor=111827" />
-    <img alt="SQLite 3.x" src="https://img.shields.io/badge/SQLite-3.x-003b57?style=flat-square&logo=sqlite&logoColor=white&labelColor=111827" />
-  </p><br><br>
-</div>
+<p align="center">
+  <img src="./VIBEAUDIT.png" alt="VIBE AUDIT" width="560" />
+</p>
+
+<p align="center">
+  <strong>Agent Context Audit Console</strong><br />
+  <em>Keep your coding agents on intent.</em>
+</p>
+
+<p align="center">
+  <img alt="Status Beta" src="https://img.shields.io/badge/Status-Beta-ff8a3d?style=flat-square&amp;labelColor=0f172a" />
+</p>
+
+<p align="center">
+  <img alt="FastAPI 0.109+" src="https://img.shields.io/badge/FastAPI-0.109%2B-009688?style=flat-square&amp;logo=fastapi&amp;logoColor=white&amp;labelColor=111827" />
+  <img alt="React 19.2" src="https://img.shields.io/badge/React-19.2-61dafb?style=flat-square&amp;logo=react&amp;logoColor=0b1220&amp;labelColor=111827" />
+  <img alt="Python 3.10+" src="https://img.shields.io/badge/Python-3.10%2B-3776ab?style=flat-square&amp;logo=python&amp;logoColor=white&amp;labelColor=111827" />
+  <img alt="SQLite 3.x" src="https://img.shields.io/badge/SQLite-3.x-003b57?style=flat-square&amp;logo=sqlite&amp;logoColor=white&amp;labelColor=111827" />
+</p>
 
 <p align="center">
   <img src="./readme.JPG" alt="vibe audit overview screenshot" width="100%" />
