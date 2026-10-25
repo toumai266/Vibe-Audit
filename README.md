@@ -3,114 +3,107 @@
 </p>
 
 <p align="center">
-  <strong>Agent Context Audit Console</strong><br />
-  <em>Keep your coding agents on intent.</em>
+  <strong>Keep your coding agents on intent.</strong><br />
+  A local audit console for Claude Code, Gemini CLI and Codex CLI sessions.
 </p>
 
 <p align="center">
   <img alt="Status Beta" src="https://img.shields.io/badge/Status-Beta-ff8a3d?style=flat-square&amp;labelColor=0f172a" />
+  <img alt="npm" src="https://img.shields.io/badge/npx-vibe--audit-cb3837?style=flat-square&amp;logo=npm&amp;logoColor=white&amp;labelColor=111827" />
+  <img alt="FastAPI" src="https://img.shields.io/badge/FastAPI-0.109%2B-009688?style=flat-square&amp;logo=fastapi&amp;logoColor=white&amp;labelColor=111827" />
+  <img alt="React 19" src="https://img.shields.io/badge/React-19.2-61dafb?style=flat-square&amp;logo=react&amp;logoColor=0b1220&amp;labelColor=111827" />
+  <img alt="License MIT" src="https://img.shields.io/badge/License-MIT-64748b?style=flat-square&amp;labelColor=111827" />
 </p>
 
 <p align="center">
-  <img alt="FastAPI 0.109+" src="https://img.shields.io/badge/FastAPI-0.109%2B-009688?style=flat-square&amp;logo=fastapi&amp;logoColor=white&amp;labelColor=111827" />
-  <img alt="React 19.2" src="https://img.shields.io/badge/React-19.2-61dafb?style=flat-square&amp;logo=react&amp;logoColor=0b1220&amp;labelColor=111827" />
-  <img alt="Python 3.10+" src="https://img.shields.io/badge/Python-3.10%2B-3776ab?style=flat-square&amp;logo=python&amp;logoColor=white&amp;labelColor=111827" />
-  <img alt="SQLite 3.x" src="https://img.shields.io/badge/SQLite-3.x-003b57?style=flat-square&amp;logo=sqlite&amp;logoColor=white&amp;labelColor=111827" />
+  <a href="media/vibe-audit.mp4"><img src="media/preview.webp" alt="Vibe Audit demo: baseline from intent, alignment scoring, phase-shift detection and flags" width="100%"></a>
+  <br>
+  <sub><a href="media/vibe-audit.mp4">Watch the full video (0:45)</a></sub>
 </p>
-
-<p align="center">
-  <img src="./screenshot.JPG" alt="vibe audit overview screenshot" width="100%" />
-</p>
-
-## 1. Overview
-
-Vibe Audit collects and analyzes work sessions from Claude Code, Gemini CLI, and Codex CLI to show:
-- whether the agent is still working within the context you intended
-- when a context shift (pivot) happens
-
-Its purpose is to trace agent conversations and monitor context drift.
-
-### Why This Is Needed
-
-In vibe coding, agents can drift from user intent during long sessions.
-- goals get subtly reinterpreted
-- prior context gets compressed, lost, or distorted
-- output looks fine, but unrequested work is still happening
-
-Vibe Audit makes these moments visible so humans can step in at the right time.
-It helps you supervise the agent while keeping work aligned with intent.
-
-### Core Features
-
-- Baseline auto-generation from user intent
-- Phase-shift detection: `continuation`, `new_phase`, `pivot`
-- Alignment score with rationale ("Why this score")
-- Dual flag detection (rule-based + LLM-based)
-- Context Evolution / Event Log tracking
-- Automatic baseline version switch on pivot
-- DB backup/restore from the UI
-
-## 2. Installation
-
-Running with `npx` is recommended.
-At first launch, onboarding runs so you can configure hooks for your CLI setup.
 
 ```bash
 npx vibe-audit
 ```
 
-## 3. Settings
+## Why
 
-Open `Settings` in the top-right of the web app.
+You ask an agent to *add request logging to the FastAPI app*. An hour later it reports "Done ✓", and somewhere along the way it also refactored the auth module, built a React dashboard and migrated the database. In long vibe-coding sessions, agents drift: goals get reinterpreted, earlier context gets compressed or lost, and the output still looks fine while unrequested work piles up.
 
-- Set the LLM model used for baseline/alignment analysis
-- Add API keys (OpenAI / Gemini / Anthropic) as needed
-- Configure AI response language, interface language, and timezone
-- For custom models, use LiteLLM `provider/model` format (example: `openai/gpt-5.2`)
+Reading every transcript doesn't scale. Vibe Audit watches the session for you and shows **when** the agent left your intent, **how far**, and **why it thinks so**, so you can step in at the right moment.
 
-## 4. DB Manager
+## Features
 
-Open `DB Manager` in the top-right of the web app.
+- **Baseline from intent.** Your first prompt becomes a baseline of goals, must-haves and must-nots.
+- **Alignment score.** Every turn is scored against the baseline, with a "why this score" explanation.
+- **Phase-shift detection.** Each new instruction is classified as `continuation`, `new_phase` or `pivot`. A pivot automatically starts a new baseline version, so the record stays honest about what you actually asked for.
+- **Dual flags.** Instant rule-based flags for risky actions (`rm -rf`, `DROP TABLE`, `.env` access, credentials in code, network calls) plus LLM-based flags for drift the rules can't see.
+- **Context evolution.** A timeline of every baseline version, phase and event, so you can see exactly when and how the intent changed.
+- **100% local.** Sessions live in SQLite on your machine. Back up and restore the database from the UI to move between machines.
 
-- `DB Download`: exports the current SQLite backup
-- `DB Upload`: restores from a backup file and replaces current DB data
-- You can use it to migrate sessions across machines or recover local history
-- After upload, restart is recommended for a clean state refresh
+## How it works
 
-## 5. Additional Commands
-
-You can re-run onboarding or configure hooks manually:
-
-```bash
-# Run onboarding wizard
-node bin/cli.js init
-
-# Gemini hook (run in the target project)
-# Re-run `setup-gemini` for each new project path.
-node bin/cli.js setup-gemini
-
-# Claude + Codex global hooks
-node bin/cli.js setup-hooks
-
-# Environment diagnostics
-node bin/cli.js doctor
+```mermaid
+flowchart LR
+  subgraph CLIs["Coding agents"]
+    CC["Claude Code"]
+    GC["Gemini CLI"]
+    CX["Codex CLI"]
+  end
+  CC -- hooks --> D
+  GC -- hooks --> D
+  CX -- hooks --> D
+  D["Local daemon (FastAPI)<br/>turn aggregation"] --> R["Rule engine<br/>instant flags"]
+  D --> L["LLM analysis (LiteLLM)<br/>baseline · alignment · phase"]
+  R --> DB[("SQLite<br/>~/.vibe-audit")]
+  L --> DB
+  DB -- SSE --> UI["Web console (React)"]
 ```
 
-## 6. Data and Privacy
+Lightweight hooks forward each agent's events to a local daemon, which groups them into turns. The rule engine flags known dangerous patterns immediately; the LLM pass builds and versions the baseline, scores alignment and classifies phase shifts. The console updates live over server-sent events. Any model LiteLLM supports can drive the analysis, including OpenAI, Gemini and Anthropic.
 
-Vibe Audit runs 100% locally.
-- Runtime data: `~/.vibe-audit`
-- Main DB: `~/.vibe-audit/vibe_audit.db`
-- Settings: `~/.vibe-audit/settings.json`
+## Getting started
 
-## 7. Current Limitations
+```bash
+npx vibe-audit
+```
 
-Vibe Audit is currently in beta. You may see:
-- different outcomes across CLIs due to event-format differences
-- partial loss of the last turn if execution is force-stopped during streaming
-- boundary-case variation because alignment/phase classification includes LLM interpretation
+The first launch runs an onboarding wizard that sets up hooks for the CLIs you use, then opens the console.
+
+**Settings** (top right): choose the analysis model (any LiteLLM `provider/model`, e.g. `openai/gpt-5.2`), add API keys, and set the response language, interface language and time zone.
+
+**DB Manager** (top right): download the SQLite database as a backup, or upload one to restore. Restart after a restore for a clean state.
+
+### CLI commands
+
+```bash
+node bin/cli.js init            # re-run the onboarding wizard
+node bin/cli.js setup-hooks     # Claude Code + Codex CLI global hooks
+node bin/cli.js setup-gemini    # Gemini CLI hook, run once per project path
+node bin/cli.js doctor          # environment diagnostics
+```
+
+### Data and privacy
+
+Everything runs locally. Nothing leaves your machine except the calls to the LLM provider you configure.
+
+| | Path |
+|---|---|
+| Runtime data | `~/.vibe-audit` |
+| Database | `~/.vibe-audit/vibe_audit.db` |
+| Settings | `~/.vibe-audit/settings.json` |
+
+## Known limitations
+
+Vibe Audit is in beta.
+
+- Event formats differ between CLIs, so results can vary slightly by agent.
+- Force-stopping an agent mid-stream can lose part of the last turn.
+- Alignment and phase classification include LLM judgment, so borderline cases can vary between runs.
 
 ## License
 
 MIT
 
+---
+
+Built by [Yoo Heehyeon](https://hhkb.dev) at [Intbox](https://intbox.org).
